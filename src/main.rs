@@ -1,6 +1,9 @@
 use serenity::{
     async_trait,
-    model::channel::Message, // Import Message from channel module
+    model::{
+        channel::Message,
+        id::UserId, // Import UserId for sending DMs
+    },
     prelude::{Context, EventHandler},
     framework::standard::{
         macros::{command, group},
@@ -16,7 +19,7 @@ struct Handler;
 
 #[async_trait]
 impl EventHandler for Handler {
-    async fn ready(&self, _: Context, ready: serenity::model::gateway::Ready) {
+    async fn ready(&self, ctx: Context, ready: serenity::model::gateway::Ready) {
         println!("{} is connected!", ready.user.name);
     }
 }
@@ -24,7 +27,7 @@ impl EventHandler for Handler {
 #[tokio::main]
 async fn main() {
     // Initialize the bot with your Discord bot token
-    let token = "YOUR_TOKEN_HERE";
+    let token = "insert token here";
 
     // Create a new instance of the Discord client
     let mut client = serenity::Client::builder(token)
@@ -41,6 +44,11 @@ async fn main() {
 
 #[command]
 async fn ping(ctx: &Context, msg: &Message) -> CommandResult {
-    msg.reply(ctx, "Pong!").await?;
+    let user_id = msg.author.id;
+    let dm = user_id
+        .create_dm_channel(&ctx.http)
+        .await
+        .expect("Failed to create DM channel");
+    dm.say(&ctx.http, "Pong!").await?;
     Ok(())
 }
