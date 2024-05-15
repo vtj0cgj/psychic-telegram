@@ -4,13 +4,6 @@ use std::net::TcpStream;
 fn main() {
     println!("Welcome to the Server Selector!");
 
-    println!("Available servers:");
-    println!("1. Server A");
-    println!("2. Server B");
-
-    print!("Select a server (1 or 2): ");
-    io::stdout().flush().unwrap();
-
     let mut input = String::new();
     io::stdin().read_line(&mut input).expect("Failed to read line");
 
