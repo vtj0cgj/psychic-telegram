@@ -17,7 +17,7 @@ fn main() {
     let server_port: String = input;
 
     println!("\nIP: {}Port: {}", server_ip, server_port);
-
+    // let server_address: String = String;
     match TcpStream::connect(server_address) {
         Ok(mut stream) => {
             println!("Connected to server!");
