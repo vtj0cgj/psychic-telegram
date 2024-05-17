@@ -7,7 +7,17 @@ fn main() {
     let mut input = String::new();
     io::stdin().read_line(&mut input).expect("Failed to read line");
 
+    println!("Server IP;");
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).expect("Failed to read line");
     let server_address = input;
+
+    println!("Server port:");
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).expect("Failed to read line");
+    let server_port = input;
+
+    println!("IP: {}\nPort: {}", server_address, server_port);
 
     match TcpStream::connect(server_address) {
         Ok(mut stream) => {
