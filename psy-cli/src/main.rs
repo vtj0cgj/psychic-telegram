@@ -7,18 +7,19 @@ fn main() {
     io::stdin().read_line(&mut input).expect("Failed to read line");
 
     println!("Server IP:");
-    let mut input: String = String::new();
-    io::stdin().read_line(&mut input).expect("Failed to read line");
-    let server_ip: String = input;
+    let mut server_ip = String::new();
+    io::stdin().read_line(&mut server_ip).expect("Failed to read line");
+    let server_ip = server_ip.trim();
 
     println!("Server port:");
-    let mut input: String = String::new();
-    io::stdin().read_line(&mut input).expect("Failed to read line");
-    let server_port: String = input;
+    let mut server_port = String::new();
+    io::stdin().read_line(&mut server_port).expect("Failed to read line");
+    let server_port = server_port.trim();
 
-    println!("\nIP: {}Port: {}", server_ip, server_port);
-    // let server_address: String = String;
-    match TcpStream::connect(server_address) {
+    println!("\nIP: {}\nPort: {}", server_ip, server_port);
+
+    let server_address = format!("{}:{}", server_ip, server_port);
+    match TcpStream::connect(&server_address) {
         Ok(mut stream) => {
             println!("Connected to server!");
             loop {

