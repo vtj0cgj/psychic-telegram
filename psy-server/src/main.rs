@@ -27,8 +27,8 @@ fn handle_client(mut stream: TcpStream) {
 }
 
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:8080").expect("Failed to bind port");
-    println!("Server listening on port 8080...");
+    let listener = TcpListener::bind("127.0.0.1:200").expect("Failed to bind port");
+    println!("Server listening on port 200...");
 
     for stream in listener.incoming() {
         match stream {
