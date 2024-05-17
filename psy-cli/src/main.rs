@@ -2,22 +2,21 @@ use std::io::{self, Write, Read};
 use std::net::TcpStream;
 
 fn main() {
-    println!("Welcome to the Server Selector!");
-
-    let mut input = String::new();
+    println!("Welcome to the Server Selector!\nPress any button to continue.");
+    let mut input: String = String::new();
     io::stdin().read_line(&mut input).expect("Failed to read line");
 
-    println!("Server IP;");
-    let mut input = String::new();
+    println!("Server IP:");
+    let mut input: String = String::new();
     io::stdin().read_line(&mut input).expect("Failed to read line");
-    let server_address = input;
+    let server_ip: String = input;
 
     println!("Server port:");
-    let mut input = String::new();
+    let mut input: String = String::new();
     io::stdin().read_line(&mut input).expect("Failed to read line");
-    let server_port = input;
+    let server_port: String = input;
 
-    println!("IP: {}\nPort: {}", server_address, server_port);
+    println!("\nIP: {}Port: {}", server_ip, server_port);
 
     match TcpStream::connect(server_address) {
         Ok(mut stream) => {
