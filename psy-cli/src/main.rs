@@ -23,18 +23,31 @@ fn main() {
         Ok(mut stream) => {
             println!("Connected to server!");
             loop {
+                // Get the command from the user
                 print!("> ");
                 io::stdout().flush().unwrap();
 
                 let mut command = String::new();
                 io::stdin().read_line(&mut command).expect("Failed to read line");
 
+                // Send the command to the server
                 stream.write_all(command.as_bytes()).expect("Failed to write to server");
 
+                // Read the response from the server
                 let mut buffer = [0; 512];
-                stream.read(&mut buffer).expect("Failed to read from server");
-                let output = String::from_utf8_lossy(&buffer);
-                println!("{}", output);
+                let mut response = String::new();
+                while let Ok(n) = stream.read(&mut buffer) {
+                    if n == 0 {
+                        break; // The server closed the connection
+                    }
+                    response.push_str(&String::from_utf8_lossy(&buffer[..n]));
+                    if n < buffer.len() {
+                        break; // End of response
+                    }
+                }
+
+                // Output the server response
+                println!("{}", response);
             }
         }
         Err(e) => {
