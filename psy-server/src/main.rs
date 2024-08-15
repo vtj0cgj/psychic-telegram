@@ -31,6 +31,9 @@ fn handle_client(mut stream: TcpStream) {
         // Send the output back to the client
         stream.write_all(&output.stdout).expect("Failed to write to stream");
 
+        // Send EOF merker to ensure the client stops awaiting input
+        stream.write_all(b"\nEOF\n").expect("Failed to send EOF marker");
+
         // Flush the stream to ensure all data is sent
         stream.flush().expect("Failed to flush stream");
     }

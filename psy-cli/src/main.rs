@@ -33,20 +33,24 @@ fn main() {
                 // Send the command to the server
                 stream.write_all(command.as_bytes()).expect("Failed to write to server");
 
-                // Read the response from the server
+                // Read the response from the server until EOF marker
                 let mut buffer = [0; 512];
                 let mut response = String::new();
                 while let Ok(n) = stream.read(&mut buffer) {
                     if n == 0 {
                         break; // The server closed the connection
                     }
-                    response.push_str(&String::from_utf8_lossy(&buffer[..n]));
-                    if n < buffer.len() {
-                        break; // End of response
+                    let chunk = String::from_utf8_lossy(&buffer[..n]);
+                    response.push_str(&chunk);
+                    if chunk.contains("\nEOF\n") {
+                        break; // Stop reading when EOF marker is found
                     }
                 }
 
-                // Output the server response
+                // Remove the EOF marker from the response and print the output
+                if let Some(pos) = response.find("\nEOF\n") {
+                    response = response[..pos].to_string();
+                }
                 println!("{}", response);
             }
         }
