@@ -52,7 +52,7 @@ fn main() {
                     response = response[..pos].to_string();
                 }
                 println!("{}", response);
-            }
+            }   
         }
         Err(e) => {
             eprintln!("Failed to connect: {}", e);
